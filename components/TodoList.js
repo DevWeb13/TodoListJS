@@ -82,6 +82,9 @@ class TodoListItem {
     })
     deleteButton.append(deleteIcon)
     li.append(checkbox, label, deleteButton)
+
+    deleteButton.addEventListener('click', (e) => this.remove(e))
+
     this.#element = li
   }
 
@@ -90,6 +93,15 @@ class TodoListItem {
    */
   appendTo(element) {
     element.append(this.#element)
+  }
+
+  /**
+   *
+   * @param   {PointerEvent}  e  [e description]
+   */
+  remove(e) {
+    e.preventDefault()
+    this.#element.remove()
   }
 
 }
