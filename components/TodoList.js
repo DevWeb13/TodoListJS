@@ -1,9 +1,12 @@
+import { createElement } from "../function/dom.js";
+
 /**
  * @typedef {Object} Todo
  * @property {string} title
  * @property {boolean} completed
  * @property {number} id
  */
+
 
 export class TodoList {
   /**
@@ -50,4 +53,33 @@ export class TodoList {
     </ul>
   </main>`
   }
+}
+
+class TodoListItem {
+
+  /** @type {Todo} */
+  constructor(todo) {
+    const li = createElement('li', {
+      class: 'todo list-group-item d-flex align-items-center'
+    })
+    const checkbox = createElement('input', {
+      class: 'form-check-input',
+      type: 'checkbox',
+      id: `todo-${todo.id}`
+    })
+    const label = createElement('label', {
+      class: 'ms-2 form-check-label',
+      for: `todo-${todo.id}`
+    })
+    label.innerText = todo.title
+    const deleteButton = createElement('label', {
+      class: 'ms-auto btn btn-danger btn-sm'
+    })
+    const deleteIcon = createElement('i', {
+      class: 'bi-trash'
+    })
+    deleteButton.append(deleteIcon)
+    li.append(checkbox, label, deleteButton)
+  }
+
 }
