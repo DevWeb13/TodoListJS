@@ -39,23 +39,24 @@ export class TodoList {
     </div>
 
     <ul class="list-group">
-      <li class="todo list-group-item d-flex align-items-center">
-        <input class="form-check-input" type="checkbox" id="todo-1">
-        <label class="ms-2 form-check-label" for="todo-1">
-          Tâche à faire 2
-        </label>
-        <label class="ms-auto btn btn-danger btn-sm">
-          <i class="bi-trash">
-          </i>
-        </label>
-      </li>
-
     </ul>
   </main>`
+
+    const list = element.querySelector('.list-group')
+    for (const todo of this.#todos) {
+      const todoListItem = new TodoListItem(todo)
+      if (list) {
+        // @ts-ignore
+        todoListItem.appendTo(list)
+      }
+
+    }
   }
 }
 
 class TodoListItem {
+
+  #element
 
   /** @type {Todo} */
   constructor(todo) {
@@ -65,7 +66,8 @@ class TodoListItem {
     const checkbox = createElement('input', {
       class: 'form-check-input',
       type: 'checkbox',
-      id: `todo-${todo.id}`
+      id: `todo-${todo.id}`,
+      checked: todo.completed ? '' : null
     })
     const label = createElement('label', {
       class: 'ms-2 form-check-label',
@@ -80,6 +82,14 @@ class TodoListItem {
     })
     deleteButton.append(deleteIcon)
     li.append(checkbox, label, deleteButton)
+    this.#element = li
+  }
+
+  /**
+   * @param   {HTMLElement}  element  
+   */
+  appendTo(element) {
+    element.append(this.#element)
   }
 
 }

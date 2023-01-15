@@ -7,7 +7,9 @@
 export function createElement(tagName, attributes) {
   const element = document.createElement(tagName);
   for (const [key, value] of Object.entries(attributes)) {
-    element.setAttribute(key, value);
+    if (value !== null && value !== undefined) {
+      element.setAttribute(key, value);
+    }
   }
   return element;
 }
