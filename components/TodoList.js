@@ -13,6 +13,12 @@ export class TodoList {
    * @type {Todo[]}
    */
   #todos = []
+
+  /**
+   * @type {HTMLUListElement[]}
+   */
+  #listElement = []
+
   /**
    *
    * @param   {Todo[]}  todos  [todos description]
@@ -42,16 +48,43 @@ export class TodoList {
     </ul>
   </main>`
 
-    const list = element.querySelector('.list-group')
+    // @ts-ignore
+    this.#listElement = element.querySelector('.list-group')
     for (const todo of this.#todos) {
       const todoListItem = new TodoListItem(todo)
-      if (list) {
+      if (this.#listElement) {
         // @ts-ignore
-        todoListItem.appendTo(list)
+        this.#listElement.append(todoListItem.element)
       }
 
     }
+    // @ts-ignore
+    element.querySelector('form').addEventListener('submit', (e) => this.onSubmit(e))
   }
+
+  /**
+   * @param   {SubmitEvent}  e  
+   */
+  onSubmit(e) {
+    e.preventDefault()
+    const form = e.currentTarget
+    // @ts-ignore
+    const title = new FormData(form).get('title')?.toString()
+    if (title === '') {
+      return
+    }
+    const todo = {
+      title,
+      completed: false,
+      id: Date.now()
+    }
+    const item = new TodoListItem(todo)
+    // @ts-ignore
+    this.#listElement.prepend(item.element)
+    // @ts-ignore
+    form.reset()
+  }
+
 }
 
 class TodoListItem {
@@ -83,16 +116,17 @@ class TodoListItem {
     deleteButton.append(deleteIcon)
     li.append(checkbox, label, deleteButton)
 
+    // @ts-ignore
     deleteButton.addEventListener('click', (e) => this.remove(e))
 
     this.#element = li
   }
 
   /**
-   * @param   {HTMLElement}  element  
+   * @return  {HTMLElement}    
    */
-  appendTo(element) {
-    element.append(this.#element)
+  get element() {
+    return this.#element
   }
 
   /**
