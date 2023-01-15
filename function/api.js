@@ -24,7 +24,7 @@ class CustomError extends Error {
  * @param {string} url - The url from which data should be retrieved
  * @param {Object} options - The options of the request
  */
-export async function fetchJSON(url, options) {
+export async function fetchJSON(url, options = {}) {
   const headers = { Accept: 'application/json', ...options.headers }
   const r = await fetch(url, { ...options, headers })
   if (r.ok) {
