@@ -5,7 +5,7 @@ import { TodoList } from "./components/TodoList.js";
 try {
   const todos = await fetchJSON('https://jsonplaceholder.typicode.com/todos?_limit=5')
   const list = new TodoList(todos)
-  list.appendTo(document.querySelector('#todolist'))
+  list.appendTo(document.querySelector('#todolist') || document.body)
 }
 catch (e) {
   const alertElement = createElement('div', {
