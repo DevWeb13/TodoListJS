@@ -13,3 +13,12 @@ export function createElement(tagName, attributes) {
   }
   return element;
 }
+
+/** *
+ * @param   {string}  templateId  [templateId description]
+ *
+ * @return  {DocumentFragment}     
+ */
+export function cloneTemplate(templateId) {
+  return document.getElementById(templateId).content.cloneNode(true);
+}
