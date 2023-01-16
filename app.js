@@ -14,4 +14,5 @@ catch (e) {
   })
   alertElement.innerText = 'Unable to retrieve the elements'
   document.body.prepend(alertElement)
+  console.error(e);
 }
