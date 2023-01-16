@@ -1,4 +1,4 @@
-import { cloneTemplate, createElement } from "../function/dom.js";
+import { cloneTemplate } from "../function/dom.js";
 
 /**
  * @typedef {Object} Todo
@@ -68,6 +68,14 @@ export class TodoList {
     element.querySelectorAll('.btn-group button').forEach(button => {
       button.addEventListener('click', (e) => this.#toggleFilter(e))
     })
+
+    this.#listElement.addEventListener('delete', ({ detail: todo }) => {
+      this.#todos = this.#todos.filter(t => t !== todo)
+    });
+
+    this.#listElement.addEventListener('toggle', ({ detail: todo }) => {
+      todo.completed = !todo.completed
+    });
   }
 
   /** @param {Event} e */
@@ -96,9 +104,11 @@ export class TodoList {
 class TodoListItem {
 
   #element
+  #todo
 
   /** @type {Todo} */
   constructor(todo) {
+    this.#todo = todo
     const id = `todo-${todo.id}`
     const li = cloneTemplate('todoItem').firstElementChild
 
@@ -116,6 +126,12 @@ class TodoListItem {
     this.toggle(checkbox)
     deleteButton.addEventListener('click', (e) => this.remove(e))
     checkbox.addEventListener('change', (e) => this.toggle(e.currentTarget))
+
+    this.#element.addEventListener('delete', (e) => {
+      this.#element.remove()
+    })
+
+
   }
 
   /**
@@ -131,6 +147,16 @@ class TodoListItem {
    */
   remove(e) {
     e.preventDefault()
+    const event = new CustomEvent('delete',
+      {
+        detail: this.#todo,
+        bubbles: true,
+        cancelable: true
+      })
+    this.#element.dispatchEvent(event)
+    if (event.defaultPrevented) {
+      return
+    }
     this.#element.remove()
   }
 
@@ -145,5 +171,11 @@ class TodoListItem {
     } else {
       this.#element.classList.remove('is-completed')
     }
+    const event = new CustomEvent('toggle',
+      {
+        detail: this.#todo,
+        bubbles: true
+      })
+    this.#element.dispatchEvent(event)
   }
 }
