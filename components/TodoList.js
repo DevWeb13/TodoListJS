@@ -18,27 +18,7 @@ export class TodoList {
    */
   #listElement = []
 
-  /**
-   * @type {Function} onSubmit
-   * @param   {SubmitEvent}  e
-   */
-  #onSubmit = (e) => {
-    e.preventDefault()
-    const form = e.currentTarget
 
-    const title = new FormData(form).get('title')?.toString()
-    if (title === '') {
-      return
-    }
-    const todo = {
-      title,
-      completed: false,
-      id: Date.now()
-    }
-    const item = new TodoListItem(todo)
-    this.#listElement.prepend(item.element)
-    form.reset()
-  }
 
   /**
    *
@@ -71,11 +51,40 @@ export class TodoList {
 
     this.#listElement.addEventListener('delete', ({ detail: todo }) => {
       this.#todos = this.#todos.filter(t => t !== todo)
+      this.#onUpdate()
     });
 
     this.#listElement.addEventListener('toggle', ({ detail: todo }) => {
       todo.completed = !todo.completed
+      this.#onUpdate()
     });
+  }
+
+  /**
+   * @param   {SubmitEvent}  e
+   */
+  #onSubmit(e) {
+    e.preventDefault()
+    const form = e.currentTarget
+
+    const title = new FormData(form).get('title')?.toString()
+    if (title === '') {
+      return
+    }
+    const todo = {
+      title,
+      completed: false,
+      id: Date.now()
+    }
+    const item = new TodoListItem(todo)
+    this.#listElement.prepend(item.element)
+    this.#todos.push(todo)
+    this.#onUpdate()
+    form.reset()
+  }
+
+  #onUpdate() {
+    localStorage.setItem('todos', JSON.stringify(this.#todos))
   }
 
   /** @param {Event} e */
