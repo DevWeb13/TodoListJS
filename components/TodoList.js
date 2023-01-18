@@ -1,7 +1,7 @@
 import { cloneTemplate } from "../function/dom.js";
 
 /**
- * @typedef {Object} Todo
+ * @typedef {{title: string;completed: boolean;id: number;}} Todo
  * @property {string} title
  * @property {boolean} completed
  * @property {number} id
