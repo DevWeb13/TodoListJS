@@ -1,4 +1,3 @@
-import { fetchJSON } from "./function/api.js";
 import { createElement } from "./function/dom.js";
 import { TodoList } from "./components/TodoList.js";
 
